@@ -32,6 +32,7 @@ public class LetterControl : MonoBehaviour
     {
         if (isCollected == true) //quando o objeto com a tag 1/2/3 for tocado, vai chamar essa movimentção
         {
+
             //DIREÇÃO
             Vector3 currentPosition = transform.position;
             Vector3 moveDirection = followTarget.position - currentPosition;
@@ -44,7 +45,7 @@ public class LetterControl : MonoBehaviour
                 distanceToTarget = moveSpeed;
             }
 
-            moveDirection.Normalize();
+            //moveDirection.Normalize();
 
             Vector3 target = moveDirection * distanceToTarget + currentPosition;
 

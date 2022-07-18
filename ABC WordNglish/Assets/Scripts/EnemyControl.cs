@@ -13,7 +13,7 @@ public class EnemyControl : MonoBehaviour
     public bool isDying =  false;
     public Animator Animations;
 
-    public int danoPlayer = 15;
+    public int danoPlayer = 10;
     public float cont = 1.5f;
 
     private void Start()
@@ -24,7 +24,7 @@ public class EnemyControl : MonoBehaviour
     void Update()
     {
         MoveEnemy();
-        EnemyDead();
+        //EnemyDead();
     }
 
     public void MoveEnemy()

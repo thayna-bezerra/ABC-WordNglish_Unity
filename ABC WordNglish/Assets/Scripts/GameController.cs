@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -24,9 +25,9 @@ public class GameController : MonoBehaviour
     [Space(10)]
 
     [Header("HUD")]
-    public Text QtdCoins;
     public GameObject iconKey;
     public GameObject[] PanelObjetivoHUD = new GameObject[3];
+    public Text QtdCoins;
 
     [Space(10)]
 
@@ -39,19 +40,19 @@ public class GameController : MonoBehaviour
 
     public List<Transform> allLetters = new List<Transform>();
     
-    public GameObject LetterC;
-    public GameObject LetterA;
-    public GameObject LetterT;
-    public GameObject segueplayer;
+    public GameObject Letter1;
+    public GameObject Letter2;
+    public GameObject Letter3;
+    public GameObject FollowPlayer;
 
     [Space(10)]
 
     [Header("Panel Control")]
     public GameObject panelWins;
     public GameObject panelOver;
+    public GameObject panelPause;
 
-
-    private void Start()
+    void Start()
     {
         currentLife = maxLife;
         barraDeVida.maxValue = maxLife;
@@ -60,6 +61,7 @@ public class GameController : MonoBehaviour
 
         panelWins.SetActive(false);
         panelOver.SetActive(false);
+        panelPause.SetActive(false);
     }
 
     void Update() 
@@ -70,8 +72,8 @@ public class GameController : MonoBehaviour
         if(currentLife <= 0)
         {
             panelOver.SetActive(true);
+            //Time.timeScale = 0f;
         }
-
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -80,13 +82,11 @@ public class GameController : MonoBehaviour
         {
             //Transform target = allLetters.Count == 0 ? transform : allLetters[allLetters.Count - 1];
             //collision.GetComponent<LetterControl>().LetterCollected(target, moveSpeed, turnSpeed);
-
-            collision.GetComponent<LetterControl>().LetterCollected(segueplayer.transform, moveSpeed, turnSpeed);
-
             //allLetters.Add(collision.transform);
-            allLetters.Add(LetterC.transform); //pos lista = 0
+            
+            collision.GetComponent<LetterControl>().LetterCollected(FollowPlayer.transform, moveSpeed, turnSpeed);
 
-            allLetters[0] = LetterC.transform;
+            allLetters.Add(Letter1.transform); //pos lista = 0
 
             Debug.Log("Colidiu com a LETRA C - " + allLetters.Count);
 
@@ -94,12 +94,24 @@ public class GameController : MonoBehaviour
             FoundLetters = 1;
         }
 
+        else if (FoundLetters == 0 && collision.CompareTag("2"))
+        {
+            Debug.Log("DANO por tocar na letra A antes da letra C");
+            DamagePlayer();
+        }
+        
+        else if (FoundLetters == 0 && collision.CompareTag("3"))
+        {
+            Debug.Log("DANO por tocar na letra T antes da letra C");
+            DamagePlayer();
+        }
+
         if (collision.CompareTag("2") && FoundLetters == 1)
         {
-            LetterC.transform.GetComponent<LetterControl>().LetterCollected(LetterA.transform, moveSpeed, turnSpeed);
-            collision.GetComponent<LetterControl>().LetterCollected(segueplayer.transform, moveSpeed, turnSpeed);
+            collision.GetComponent<LetterControl>().LetterCollected(FollowPlayer.transform, moveSpeed, turnSpeed);
+            Letter1.transform.GetComponent<LetterControl>().LetterCollected(Letter2.transform, moveSpeed, turnSpeed);
 
-            allLetters.Add(LetterA.transform);
+            allLetters.Add(Letter2.transform);
             
             Debug.Log("Colidiu com a LETRA A -" + allLetters.Count);
 
@@ -107,12 +119,18 @@ public class GameController : MonoBehaviour
             FoundLetters = 2;
         }
 
+        else if (FoundLetters == 1 && collision.CompareTag("3"))
+        {
+            Debug.Log("DANO por tocar na letra T antes da letra A");
+            DamagePlayer();
+        }
+
         if (collision.CompareTag("3") && FoundLetters == 2)
         {
-            collision.GetComponent<LetterControl>().LetterCollected(segueplayer.transform, moveSpeed, turnSpeed);
-            LetterA.transform.GetComponent<LetterControl>().LetterCollected(LetterT.transform, moveSpeed, turnSpeed);
+            collision.GetComponent<LetterControl>().LetterCollected(FollowPlayer.transform, moveSpeed, turnSpeed);
+            Letter2.transform.GetComponent<LetterControl>().LetterCollected(Letter3.transform, moveSpeed, turnSpeed);
 
-            allLetters.Add(LetterT.transform);
+            allLetters.Add(Letter3.transform);
 
             Debug.Log("Colidiu com a LETRA T -" + allLetters.Count);
 
@@ -120,16 +138,12 @@ public class GameController : MonoBehaviour
             FoundLetters = 3;
         }
 
-        //else { Debug.Log("levou dano"); } // precisa de um if dentro da condição, pq ta verificando os de baixo tbm
-
         if (collision.gameObject.CompareTag("Enemy"))
         { 
             if (ec.lifeEnemy == 1)
             {
-                SoundControl.sounds.somDanoNoPlayer.Play();
-                Debug.Log("-15 de vida");
-                isDamage = true;
-                currentLife -= ec.danoPlayer;
+                Debug.Log("DANO pelo inimigo");
+                DamagePlayer();
             }
 
             else isDamage = false;
@@ -142,8 +156,16 @@ public class GameController : MonoBehaviour
         
         if (collision.gameObject.CompareTag("Door") && FoundLetters == 3)
         {
+            Time.timeScale = 0f;
             panelWins.SetActive(true);
         }
+    }
+
+    public void DamagePlayer()
+    {
+        SoundControl.sounds.somDanoNoPlayer.Play();
+        isDamage = true;
+        currentLife -= ec.danoPlayer;
     }
 
     public void HUD()
@@ -188,4 +210,21 @@ public class GameController : MonoBehaviour
 
         }
     }
+
+    public void OnPauseBtnClicked()
+    {
+        panelPause.SetActive(true);
+        Time.timeScale = 0f;
+    }
+    public void OnRestartBtnClicked()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Time.timeScale = 1f;
+    }
+    public void OnContinueBtnClicked()
+    {
+        panelPause.SetActive(false);
+        Time.timeScale = 1f;
+    }
+
 }

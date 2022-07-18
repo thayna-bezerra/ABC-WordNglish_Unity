@@ -5,8 +5,7 @@ using UnityEngine;
 public class GroundCheck : MonoBehaviour
 {
     public MoveControl Jump;
-
-    public EnemyControl ec;
+    //public EnemyControl ec;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -16,10 +15,10 @@ public class GroundCheck : MonoBehaviour
             Jump.isJumping = false; //quando o groundcheck do player colide com o chão
         }
 
-        if (collision.gameObject.tag == "FatalPoint")
+        /*if (collision.gameObject.tag == "FatalPoint")
         {
             SoundControl.sounds.somDanoNoInimigo.Play();
             ec.isDying = true;
-        }
+        }*/
     }
 }
