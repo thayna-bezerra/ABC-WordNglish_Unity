@@ -6,7 +6,7 @@ public class EnemyControl : MonoBehaviour
 {
     public float speed;
     public GameObject point1, point2;
-    public Vector2 nextPos;
+    private Vector2 nextPos;
 
     public int lifeEnemy = 1;
 

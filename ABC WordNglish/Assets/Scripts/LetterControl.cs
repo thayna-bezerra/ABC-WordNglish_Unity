@@ -12,7 +12,7 @@ public class LetterControl : MonoBehaviour
 
     public bool isCollected = false;
 
-    private void Start()
+    public void Start()
     {
         gc.FoundLetters = 0;
     }

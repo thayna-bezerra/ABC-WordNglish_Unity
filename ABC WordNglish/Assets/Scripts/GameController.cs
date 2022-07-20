@@ -38,6 +38,9 @@ public class GameController : MonoBehaviour
     public float moveSpeed;
     public float turnSpeed;
 
+    public bool dir; //false voltando // true indo
+
+
     public List<Transform> allLetters = new List<Transform>();
     
     public GameObject Letter1;
@@ -66,6 +69,7 @@ public class GameController : MonoBehaviour
 
     void Update() 
     {
+        LetterOrder();
         HUD();
         barraDeVida.value = currentLife;
 
@@ -74,7 +78,43 @@ public class GameController : MonoBehaviour
             panelOver.SetActive(true);
             //Time.timeScale = 0f;
         }
+
     }
+
+    void LetterOrder()
+    {
+        /// C A -> GATO
+        //   INDO    //
+        if (dir == true && FoundLetters == 1)
+        {
+            Letter2.GetComponent<LetterControl>().LetterCollected(FollowPlayer.transform, moveSpeed, turnSpeed); //Para a letra A seguir o PLAYER
+            Letter1.transform.GetComponent<LetterControl>().LetterCollected(Letter2.transform, moveSpeed, turnSpeed); //Para a letra C seguir a letra A
+        }
+        /// GATO -> C A
+        //    VOLTANDO    //
+        if (dir == false && FoundLetters == 1)
+        {
+            Letter1.GetComponent<LetterControl>().LetterCollected(FollowPlayer.transform, moveSpeed, turnSpeed); //Para a letra C seguir o PLAYER
+            Letter2.transform.GetComponent<LetterControl>().LetterCollected(Letter1.transform, moveSpeed, turnSpeed); //Para a letra A seguir a letra C
+        }
+
+
+        if (dir == true && FoundLetters == 2)
+        {
+            Letter3.GetComponent<LetterControl>().LetterCollected(FollowPlayer.transform, moveSpeed, turnSpeed); //Para a letra T seguir o PLAYER
+            Letter2.GetComponent<LetterControl>().LetterCollected(Letter3.transform, moveSpeed, turnSpeed); //Para a letra A seguir a letra T
+            Letter1.transform.GetComponent<LetterControl>().LetterCollected(Letter2.transform, moveSpeed, turnSpeed); //Para a letra C seguir a letra A
+        }
+
+        if (dir == false && FoundLetters == 2)
+        {
+            Letter1.GetComponent<LetterControl>().LetterCollected(FollowPlayer.transform, moveSpeed, turnSpeed); //Para a letra C seguir o PLAYER
+            Letter2.transform.GetComponent<LetterControl>().LetterCollected(Letter1.transform, moveSpeed, turnSpeed); //Para a letra A seguir a letra C
+            Letter3.transform.GetComponent<LetterControl>().LetterCollected(Letter2.transform, moveSpeed, turnSpeed); //Para a letra T seguir a letra A
+
+        }
+    }
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -88,7 +128,7 @@ public class GameController : MonoBehaviour
 
             allLetters.Add(Letter1.transform); //pos lista = 0
 
-            Debug.Log("Colidiu com a LETRA C - " + allLetters.Count);
+            Debug.Log("Colidiu com a LETRA C / D - " + allLetters.Count);
 
             SoundControl.sounds.somColectedOthers.Play();
             FoundLetters = 1;
@@ -96,24 +136,24 @@ public class GameController : MonoBehaviour
 
         else if (FoundLetters == 0 && collision.CompareTag("2"))
         {
-            Debug.Log("DANO por tocar na letra A antes da letra C");
+            Debug.Log("DANO por tocar na letra A / O antes da letra C / D");
             DamagePlayer();
         }
         
         else if (FoundLetters == 0 && collision.CompareTag("3"))
         {
-            Debug.Log("DANO por tocar na letra T antes da letra C");
+            Debug.Log("DANO por tocar na letra T / G antes da letra C / D");
             DamagePlayer();
         }
 
         if (collision.CompareTag("2") && FoundLetters == 1)
         {
-            collision.GetComponent<LetterControl>().LetterCollected(FollowPlayer.transform, moveSpeed, turnSpeed);
-            Letter1.transform.GetComponent<LetterControl>().LetterCollected(Letter2.transform, moveSpeed, turnSpeed);
+            //collision.GetComponent<LetterControl>().LetterCollected(FollowPlayer.transform, moveSpeed, turnSpeed);
+            //Letter1.transform.GetComponent<LetterControl>().LetterCollected(Letter2.transform, moveSpeed, turnSpeed);
 
             allLetters.Add(Letter2.transform);
             
-            Debug.Log("Colidiu com a LETRA A -" + allLetters.Count);
+            Debug.Log("Colidiu com a LETRA A / O -" + allLetters.Count);
 
             SoundControl.sounds.somColectedOthers.Play();
             FoundLetters = 2;
@@ -121,18 +161,18 @@ public class GameController : MonoBehaviour
 
         else if (FoundLetters == 1 && collision.CompareTag("3"))
         {
-            Debug.Log("DANO por tocar na letra T antes da letra A");
+            Debug.Log("DANO por tocar na letra T / G antes da letra A / O");
             DamagePlayer();
         }
 
         if (collision.CompareTag("3") && FoundLetters == 2)
         {
-            collision.GetComponent<LetterControl>().LetterCollected(FollowPlayer.transform, moveSpeed, turnSpeed);
-            Letter2.transform.GetComponent<LetterControl>().LetterCollected(Letter3.transform, moveSpeed, turnSpeed);
+            //collision.GetComponent<LetterControl>().LetterCollected(FollowPlayer.transform, moveSpeed, turnSpeed);
+            //Letter2.transform.GetComponent<LetterControl>().LetterCollected(Letter3.transform, moveSpeed, turnSpeed);
 
             allLetters.Add(Letter3.transform);
 
-            Debug.Log("Colidiu com a LETRA T -" + allLetters.Count);
+            Debug.Log("Colidiu com a LETRA T / G -" + allLetters.Count);
 
             SoundControl.sounds.somColectedOthers.Play();
             FoundLetters = 3;
@@ -225,6 +265,10 @@ public class GameController : MonoBehaviour
     {
         panelPause.SetActive(false);
         Time.timeScale = 1f;
+    }
+    public void OnWinLevel()
+    {
+        SceneManager.LoadScene("Level2");
     }
 
 }

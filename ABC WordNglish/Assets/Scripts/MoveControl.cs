@@ -26,7 +26,7 @@ public class MoveControl : MonoBehaviour
     {
         Movement();
         JumpPlayer();
-        AnimState();
+        //AnimState();
     }
 
     public void Movement()
@@ -38,12 +38,14 @@ public class MoveControl : MonoBehaviour
 
         if (a > 0) //está indo
         {
+            gc.dir = true;
             IsActive = true; //está ativo andando
             transform.eulerAngles = new Vector3(0f, 0f, 0f);
         }
 
         else if (a < 0) //está voltando
         {
+            gc.dir = false;
             IsActive = true; //está ativo andando
             transform.eulerAngles = new Vector3(0f, 180f, 0f);
         }
@@ -72,11 +74,13 @@ public class MoveControl : MonoBehaviour
             if (IsActive == true)
             {
                 Animations.Play("CatWalking");
+                //Animations.Play("DogWalk");
             }
 
             else if (IsActive == false)
             {
                 Animations.Play("CatIdle");
+                //Animations.Play("DogIdle");
             }
 
         }
