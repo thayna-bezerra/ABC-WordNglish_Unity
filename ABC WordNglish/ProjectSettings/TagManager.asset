@@ -10,9 +10,6 @@ TagManager:
   - Enemy
   - FootCheck
   - FatalPoint
-  - Letter/C
-  - Letter/A
-  - Letter/T
   - Door
   - Letter/D
   - Letter/O
@@ -21,6 +18,11 @@ TagManager:
   - 2
   - 3
   - 0
+  - morte
+  - Tutorial/Movement
+  - Tutorial/Jump
+  - Tutorial/Enemy
+  - Tutorial/Letter
   layers:
   - Default
   - TransparentFX

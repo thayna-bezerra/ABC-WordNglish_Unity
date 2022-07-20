@@ -39,7 +39,7 @@ public class GameController : MonoBehaviour
     public float turnSpeed;
 
     public bool dir; //false voltando // true indo
-
+    public string currentCollectedLetters;
 
     public List<Transform> allLetters = new List<Transform>();
     
@@ -85,28 +85,28 @@ public class GameController : MonoBehaviour
     {
         /// C A -> GATO
         //   INDO    //
-        if (dir == true && FoundLetters == 1)
+        if (dir == true && currentCollectedLetters == "012")
         {
             Letter2.GetComponent<LetterControl>().LetterCollected(FollowPlayer.transform, moveSpeed, turnSpeed); //Para a letra A seguir o PLAYER
             Letter1.transform.GetComponent<LetterControl>().LetterCollected(Letter2.transform, moveSpeed, turnSpeed); //Para a letra C seguir a letra A
         }
         /// GATO -> C A
         //    VOLTANDO    //
-        if (dir == false && FoundLetters == 1)
+        if (dir == false && currentCollectedLetters == "012")
         {
             Letter1.GetComponent<LetterControl>().LetterCollected(FollowPlayer.transform, moveSpeed, turnSpeed); //Para a letra C seguir o PLAYER
             Letter2.transform.GetComponent<LetterControl>().LetterCollected(Letter1.transform, moveSpeed, turnSpeed); //Para a letra A seguir a letra C
         }
 
 
-        if (dir == true && FoundLetters == 2)
+        if (dir == true && currentCollectedLetters == "0123")
         {
             Letter3.GetComponent<LetterControl>().LetterCollected(FollowPlayer.transform, moveSpeed, turnSpeed); //Para a letra T seguir o PLAYER
             Letter2.GetComponent<LetterControl>().LetterCollected(Letter3.transform, moveSpeed, turnSpeed); //Para a letra A seguir a letra T
             Letter1.transform.GetComponent<LetterControl>().LetterCollected(Letter2.transform, moveSpeed, turnSpeed); //Para a letra C seguir a letra A
         }
 
-        if (dir == false && FoundLetters == 2)
+        if (dir == false && currentCollectedLetters == "0123")
         {
             Letter1.GetComponent<LetterControl>().LetterCollected(FollowPlayer.transform, moveSpeed, turnSpeed); //Para a letra C seguir o PLAYER
             Letter2.transform.GetComponent<LetterControl>().LetterCollected(Letter1.transform, moveSpeed, turnSpeed); //Para a letra A seguir a letra C
@@ -132,6 +132,7 @@ public class GameController : MonoBehaviour
 
             SoundControl.sounds.somColectedOthers.Play();
             FoundLetters = 1;
+            currentCollectedLetters = "01";
         }
 
         else if (FoundLetters == 0 && collision.CompareTag("2"))
@@ -157,6 +158,7 @@ public class GameController : MonoBehaviour
 
             SoundControl.sounds.somColectedOthers.Play();
             FoundLetters = 2;
+            currentCollectedLetters = "012";
         }
 
         else if (FoundLetters == 1 && collision.CompareTag("3"))
@@ -176,6 +178,7 @@ public class GameController : MonoBehaviour
 
             SoundControl.sounds.somColectedOthers.Play();
             FoundLetters = 3;
+            currentCollectedLetters = "0123";
         }
 
         if (collision.gameObject.CompareTag("Enemy"))

@@ -26,7 +26,7 @@ public class MoveControl : MonoBehaviour
     {
         Movement();
         JumpPlayer();
-        //AnimState();
+        AnimState();
     }
 
     public void Movement()
