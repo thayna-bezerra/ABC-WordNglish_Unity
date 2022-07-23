@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveControl : MonoBehaviour
+public class OtherMoveControl : MonoBehaviour
 {
     public float speed = 4;
     public float jump = 3;
@@ -73,12 +73,12 @@ public class MoveControl : MonoBehaviour
         {
             if (IsActive == true)
             {
-                Animations.Play("CatWalking");
+                Animations.Play("DogWalk");
             }
 
             else if (IsActive == false)
             {
-                Animations.Play("CatIdle");
+                Animations.Play("DogIdle");
             }
 
         }
@@ -86,7 +86,7 @@ public class MoveControl : MonoBehaviour
         else if (gc.isDamage == true)
         {
             cont -= Time.deltaTime;
-            Animations.Play("CatDamage");
+            //Animations.Play("CatDamage");
 
             if (cont < 0) { gc.isDamage = false; }
         }

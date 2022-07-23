@@ -269,9 +269,15 @@ public class GameController : MonoBehaviour
         panelPause.SetActive(false);
         Time.timeScale = 1f;
     }
-    public void OnWinLevel()
+    public void OnWinLevelGoTo2()
     {
         SceneManager.LoadScene("Level2");
+        Time.timeScale = 1f;
+    }
+    public void OnWinLevelGoTo3()
+    {
+        SceneManager.LoadScene("Level3");
+        Time.timeScale = 1f;
     }
 
 }
