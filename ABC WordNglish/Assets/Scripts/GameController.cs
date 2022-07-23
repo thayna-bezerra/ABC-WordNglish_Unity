@@ -57,6 +57,7 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
+        Time.timeScale = 1f;
         currentLife = maxLife;
         barraDeVida.maxValue = maxLife;
 
@@ -76,7 +77,7 @@ public class GameController : MonoBehaviour
         if(currentLife <= 0)
         {
             panelOver.SetActive(true);
-            //Time.timeScale = 0f;
+            Time.timeScale = 0f;
         }
 
     }
@@ -261,8 +262,8 @@ public class GameController : MonoBehaviour
     }
     public void OnRestartBtnClicked()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
     public void OnContinueBtnClicked()
     {
@@ -278,6 +279,10 @@ public class GameController : MonoBehaviour
     {
         SceneManager.LoadScene("Level3");
         Time.timeScale = 1f;
+    }
+    public void GoToHome()
+    {
+        SceneManager.LoadScene("Menu");
     }
 
 }
