@@ -23,6 +23,7 @@ TagManager:
   - Tutorial/Jump
   - Tutorial/Enemy
   - Tutorial/Letter
+  - Espinho
   layers:
   - Default
   - TransparentFX

@@ -6,14 +6,13 @@ using UnityEngine.UI;
 
 public class MenuController : MonoBehaviour
 {
+    [Header("PAINEIS")]
     public GameObject panelTelaInicial;
     public GameObject panelSelecaoFase;
+
     private void Start()
     {
-        //Iniciar apenas com o panelTelaInicial ATIVO
-        panelTelaInicial.SetActive(true);
-
-        panelSelecaoFase.SetActive(false);
+        ativarPanelInicial(); //Sempre iniciar com a Tela Inicial ATIVA
     }
 
     public void ativarSelecaoFasel()
@@ -27,9 +26,9 @@ public class MenuController : MonoBehaviour
         panelTelaInicial.SetActive(true);
         panelSelecaoFase.SetActive(false);
     }
-    public void levelName(string name)
+
+    public void levelName(string name) //Colocar nome da cena no metodo OnClick do btn
     {
         SceneManager.LoadScene(name);
     }
-
 }

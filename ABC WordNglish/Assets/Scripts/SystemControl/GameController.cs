@@ -6,30 +6,20 @@ using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
-    public EnemyControl ec;
-    public Animator Animations;
-
     [Header("Sistema de Vida")]
     public int maxLife = 100;
     public int currentLife;
     public Slider barraDeVida;
     public bool isDamage = false;
 
-    [Space(10)]
-
     [Header("Sistema de Coletáveis")]
     public int Coins;
-    [Space]
     public int KeysCollected = 0;
-
-    [Space(10)]
 
     [Header("HUD")]
     public GameObject iconKey;
     public GameObject[] PanelObjetivoHUD = new GameObject[3];
     public Text QtdCoins;
-
-    [Space(10)]
 
     [Header("LetterControl")]
     public int FoundLetters;
@@ -48,16 +38,19 @@ public class GameController : MonoBehaviour
     public GameObject Letter3;
     public GameObject FollowPlayer;
 
-    [Space(10)]
-
     [Header("Panel Control")]
     public GameObject panelWins;
     public GameObject panelOver;
     public GameObject panelPause;
 
+    [Header("Componentes")]
+    public EnemyControl ec;
+    public Animator Animations;
+
     void Start()
     {
         Time.timeScale = 1f;
+
         currentLife = maxLife;
         barraDeVida.maxValue = maxLife;
 
@@ -79,7 +72,6 @@ public class GameController : MonoBehaviour
             panelOver.SetActive(true);
             Time.timeScale = 0f;
         }
-
     }
 
     void LetterOrder()
@@ -91,6 +83,7 @@ public class GameController : MonoBehaviour
             Letter2.GetComponent<LetterControl>().LetterCollected(FollowPlayer.transform, moveSpeed, turnSpeed); //Para a letra A seguir o PLAYER
             Letter1.transform.GetComponent<LetterControl>().LetterCollected(Letter2.transform, moveSpeed, turnSpeed); //Para a letra C seguir a letra A
         }
+
         /// GATO -> C A
         //    VOLTANDO    //
         if (dir == false && currentCollectedLetters == "012")
@@ -116,24 +109,22 @@ public class GameController : MonoBehaviour
         }
     }
 
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        #region VERIFICAÇÃO PRIMEIRA LETRA
         if (collision.CompareTag("1") && FoundLetters == 0)
         {
-            //Transform target = allLetters.Count == 0 ? transform : allLetters[allLetters.Count - 1];
-            //collision.GetComponent<LetterControl>().LetterCollected(target, moveSpeed, turnSpeed);
-            //allLetters.Add(collision.transform);
-            
             collision.GetComponent<LetterControl>().LetterCollected(FollowPlayer.transform, moveSpeed, turnSpeed);
 
             allLetters.Add(Letter1.transform); //pos lista = 0
 
             Debug.Log("Colidiu com a LETRA C / D - " + allLetters.Count);
 
-            SoundControl.sounds.somColectedOthers.Play();
+            //Definindo novos valores para as vars de verificação
             FoundLetters = 1;
             currentCollectedLetters = "01";
+
+            SoundControl.sounds.somColectedOthers.Play();
         }
 
         else if (FoundLetters == 0 && collision.CompareTag("2"))
@@ -148,11 +139,12 @@ public class GameController : MonoBehaviour
             DamagePlayer();
         }
 
+        #endregion
+
+        #region VERIFICAÇÃO SEGUNDA LETRA
+
         if (collision.CompareTag("2") && FoundLetters == 1)
         {
-            //collision.GetComponent<LetterControl>().LetterCollected(FollowPlayer.transform, moveSpeed, turnSpeed);
-            //Letter1.transform.GetComponent<LetterControl>().LetterCollected(Letter2.transform, moveSpeed, turnSpeed);
-
             allLetters.Add(Letter2.transform);
             
             Debug.Log("Colidiu com a LETRA A / O -" + allLetters.Count);
@@ -168,19 +160,23 @@ public class GameController : MonoBehaviour
             DamagePlayer();
         }
 
+        #endregion
+
+        #region VERIFICAÇÃO TERCEIRA LETRA
+
         if (collision.CompareTag("3") && FoundLetters == 2)
         {
-            //collision.GetComponent<LetterControl>().LetterCollected(FollowPlayer.transform, moveSpeed, turnSpeed);
-            //Letter2.transform.GetComponent<LetterControl>().LetterCollected(Letter3.transform, moveSpeed, turnSpeed);
-
             allLetters.Add(Letter3.transform);
 
             Debug.Log("Colidiu com a LETRA T / G -" + allLetters.Count);
 
-            SoundControl.sounds.somColectedOthers.Play();
             FoundLetters = 3;
             currentCollectedLetters = "0123";
+
+            SoundControl.sounds.somColectedOthers.Play();
         }
+
+        #endregion
 
         if (collision.gameObject.CompareTag("Enemy"))
         { 
@@ -194,10 +190,9 @@ public class GameController : MonoBehaviour
         }
 
         if (collision.gameObject.CompareTag("Coin"))
-        {
             Coins++;
-        }
         
+        //Para vitória do level
         if (collision.gameObject.CompareTag("Door") && FoundLetters == 3)
         {
             Time.timeScale = 0f;
@@ -207,9 +202,10 @@ public class GameController : MonoBehaviour
 
     public void DamagePlayer()
     {
-        SoundControl.sounds.somDanoNoPlayer.Play();
         isDamage = true;
         currentLife -= ec.danoPlayer;
+
+        SoundControl.sounds.somDanoNoPlayer.Play();
     }
 
     public void HUD()
@@ -251,38 +247,43 @@ public class GameController : MonoBehaviour
                 PanelObjetivoHUD[1].SetActive(false);
                 PanelObjetivoHUD[2].SetActive(false);
                 break;
-
         }
     }
 
+    #region MÉTODOS PARA OS BOTÕES
     public void OnPauseBtnClicked()
     {
         panelPause.SetActive(true);
         Time.timeScale = 0f;
     }
+
     public void OnRestartBtnClicked()
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
     public void OnContinueBtnClicked()
     {
         panelPause.SetActive(false);
         Time.timeScale = 1f;
     }
+
     public void OnWinLevelGoTo2()
     {
         SceneManager.LoadScene("Level2");
         Time.timeScale = 1f;
     }
+
     public void OnWinLevelGoTo3()
     {
         SceneManager.LoadScene("Level3");
         Time.timeScale = 1f;
     }
+
     public void GoToHome()
     {
-        SceneManager.LoadScene("Menu");
+        SceneManager.LoadScene("_Menu");
     }
-
+    #endregion
 }

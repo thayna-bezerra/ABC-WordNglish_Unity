@@ -4,17 +4,20 @@ using UnityEngine;
 
 public class MoveControl : MonoBehaviour
 {
+    [Header("Propriedade do Movimento")]
     public float speed = 4;
     public float jump = 3;
     public float cont = 0.4f;
 
+    [Space(5)]
+
     public bool isJumping;
-    public bool IsActive;
+    public bool isActive;
 
+    [Header("Componentes")]
     public Animator Animations;
-
-    private Rigidbody2D rb2d;
     public GameController gc;
+    private Rigidbody2D rb2d;
 
     void Start()
     {
@@ -39,20 +42,22 @@ public class MoveControl : MonoBehaviour
         if (a > 0) //está indo
         {
             gc.dir = true;
-            IsActive = true; //está ativo andando
+
+            isActive = true; //está ativo andando
             transform.eulerAngles = new Vector3(0f, 0f, 0f);
         }
 
         else if (a < 0) //está voltando
         {
             gc.dir = false;
-            IsActive = true; //está ativo andando
+
+            isActive = true; 
             transform.eulerAngles = new Vector3(0f, 180f, 0f);
         }
 
         else
         {
-            IsActive = false; //parado
+            isActive = false; //parado
         }
     }
 
@@ -61,9 +66,10 @@ public class MoveControl : MonoBehaviour
     {
         if (Input.GetButtonDown("Jump") && isJumping == false) //se não estiver pulando (variável false_)
         {
-            SoundControl.sounds.somPulo.Play();
             isJumping = true;  //esta pulando fica verdadeiro quando a tecla é pressionada
             rb2d.AddForce(new Vector2(0f, jump), ForceMode2D.Impulse); //física do pulo
+
+            SoundControl.sounds.somPulo.Play();
         }
     }
 
@@ -71,16 +77,15 @@ public class MoveControl : MonoBehaviour
     {
         if (gc.isDamage == false)
         {
-            if (IsActive == true)
+            if (isActive == true)
             {
                 Animations.Play("CatWalking");
             }
 
-            else if (IsActive == false)
+            else if (isActive == false)
             {
                 Animations.Play("CatIdle");
             }
-
         }
 
         else if (gc.isDamage == true)
@@ -88,7 +93,8 @@ public class MoveControl : MonoBehaviour
             cont -= Time.deltaTime;
             Animations.Play("CatDamage");
 
-            if (cont < 0) { gc.isDamage = false; }
+            if (cont < 0) 
+                gc.isDamage = false; 
         }
     }
 }
