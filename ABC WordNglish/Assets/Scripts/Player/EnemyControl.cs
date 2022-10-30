@@ -4,17 +4,20 @@ using UnityEngine;
 
 public class EnemyControl : MonoBehaviour
 {
+    [Header("Movimentação Inimigo")]
     public float speed;
     public GameObject point1, point2;
     private Vector2 nextPos;
 
+    [Header("Vida Inimigo")]
     public int lifeEnemy = 1;
 
     public bool isDying =  false;
-    public Animator Animations;
 
     public int danoPlayer = 10;
     public float cont = 1.5f;
+    [Space]
+    public Animator Animations;
 
     private void Start()
     {
@@ -24,7 +27,6 @@ public class EnemyControl : MonoBehaviour
     void Update()
     {
         MoveEnemy();
-        //EnemyDead();
     }
 
     public void MoveEnemy()

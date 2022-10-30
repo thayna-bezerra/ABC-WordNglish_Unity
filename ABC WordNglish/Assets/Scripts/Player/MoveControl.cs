@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MoveControl : MonoBehaviour
 {
@@ -19,6 +20,9 @@ public class MoveControl : MonoBehaviour
     public GameController gc;
     private Rigidbody2D rb2d;
 
+    [Header("Para Animação")]
+    public string NameAnimation;
+
     void Start()
     {
         Animations = GetComponent<Animator>();
@@ -29,7 +33,7 @@ public class MoveControl : MonoBehaviour
     {
         Movement();
         JumpPlayer();
-        AnimState();
+        AnimState(NameAnimation);
     }
 
     public void Movement()
@@ -73,6 +77,86 @@ public class MoveControl : MonoBehaviour
         }
     }
 
+    void AnimState(string nameAnimation)
+    {
+        DefinirAnim();
+
+        if (gc.isDamage == false)
+        {
+            if (isActive == true)
+            {
+                Animations.Play(nameAnimation);
+            }
+
+            else if (isActive == false)
+            {
+                Animations.Play(nameAnimation);
+            }
+        }
+
+        else if (gc.isDamage == true)
+        {
+            cont -= Time.deltaTime;
+            Animations.Play(nameAnimation);
+
+            if (cont < 0)
+                gc.isDamage = false;
+        }
+    }
+
+    void DefinirAnim()
+    {
+        if(SceneManager.GetActiveScene().name == "Level1")
+        {
+            if (gc.isDamage == false)
+            {
+                if (isActive == true)
+                    NameAnimation = "CatWalking";
+
+                else if (isActive == false)
+                    NameAnimation = "CatIdle";
+            }
+
+            else if (gc.isDamage == true)
+                NameAnimation = "CatDamage";
+        }
+
+        if (SceneManager.GetActiveScene().name == "Level2")
+        {
+            if (gc.isDamage == false)
+            {
+                if (isActive == true)
+                    NameAnimation = "DogWalk";
+
+                else if (isActive == false)
+                    NameAnimation = "DogIdle";
+            }
+
+            else if (gc.isDamage == true)
+                NameAnimation = "";
+
+        }
+
+        if (SceneManager.GetActiveScene().name == "Level3")
+        {
+            if (gc.isDamage == false)
+            {
+                if (isActive == true)
+                    NameAnimation = "DogWalk";
+
+                else if (isActive == false)
+                    NameAnimation = "DogIdle";
+            }
+
+            else if (gc.isDamage == true)
+                NameAnimation = "";
+
+        }
+    }
+
+
+
+    /*
     void AnimState()
     {
         if (gc.isDamage == false)
@@ -96,5 +180,27 @@ public class MoveControl : MonoBehaviour
             if (cont < 0) 
                 gc.isDamage = false; 
         }
-    }
+    }*/
+    /*
+        if (gc.isDamage == false)
+        {
+            if (IsActive == true)
+            {
+                Animations.Play("DogWalk");
+            }
+
+            else if (IsActive == false)
+            {
+                Animations.Play("DogIdle");
+            }
+
+        }
+
+        else if (gc.isDamage == true)
+        {
+            cont -= Time.deltaTime;
+            //Animations.Play("CatDamage");
+
+            if (cont < 0) { gc.isDamage = false; }
+        }*/
 }
